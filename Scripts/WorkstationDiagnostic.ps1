@@ -99,9 +99,15 @@ $Services = @(
 )
 
 foreach ($ServiceName in $Services) {
-    $Service = Get-Service -Name $ServiceName
 
-    Write-Host "$($Service.DisplayName): $($Service.Status)"
+    $Service = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+
+    if ($Service) {
+        Write-Host "$($Service.DisplayName): $($Service.Status)"
+    }
+    else {
+        Write-Host "$ServiceName : SERVICE NOT FOUND"
+    }
 }
 
 Write-Host ""
