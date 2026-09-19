@@ -132,6 +132,50 @@ else {
 
 
 Write-Host ""
+Write-Host "===== DIAGNOSTIC SUMMARY ====="
+
+$IssuesFound = 0
+
+if ($FreeGB -lt 20) {
+    Write-Host "[WARNING] Low disk space"
+    $IssuesFound++
+}
+
+if (-not $GatewayTest) {
+    Write-Host "[WARNING] Default gateway unreachable"
+    $IssuesFound++
+}
+
+if (-not $HttpsTest.TcpTestSucceeded) {
+    Write-Host "[WARNING] HTTPS connectivity failed"
+    $IssuesFound++
+}
+
+foreach ($ServiceName in $Services) {
+
+    $Service = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+
+    if (-not $Service) {
+        Write-Host "[WARNING] $ServiceName service not found"
+        $IssuesFound++
+    }
+    elseif ($Service.Status -ne "Running") {
+        Write-Host "[WARNING] $($Service.DisplayName) is $($Service.Status)"
+        $IssuesFound++
+    }
+}
+
+if ($IssuesFound -eq 0) {
+    Write-Host "No basic system health issues detected."
+}
+else {
+    Write-Host ""
+    Write-Host "Potential issues detected: $IssuesFound"
+}
+
+
+
+Write-Host ""
 Write-Host "Diagnostic report saved to:"
 Write-Host $ReportPath
 
