@@ -51,6 +51,8 @@ Microsoft Entra ID security groups were used to practice identity and access man
 - Windows service status
 - Recent Windows Application errors
 - Timestamped diagnostic report generation
+- Automated health summary that flags low disk space, connectivity failures, and service issues
+- Graceful handling of missing Windows services without interrupting the diagnostic process
 
 # Skills Demonstrated
 
